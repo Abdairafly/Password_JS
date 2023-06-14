@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Évaluation de la force du mot de passe</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    
+    h1 {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    
+    label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+    
+    input[type="password"] {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 16px;
+    }
+    
+    button {
+      background-color: #4CAF50;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    
+    .result {
+      margin-top: 30px;
+      padding: 10px;
+      border-radius: 5px;
+      text-align: center;
+    }
+    
+    .result p {
+      margin: 0;
+    }
+    
+    .result-very-secure {
+      background-color: #c3e6cb;
+      color: #155724;
+      border-color: #b1dfbb;
+    }
+    
+    .result-secure {
+      background-color: #fff3cd;
+      color: #856404;
+      border-color: #ffeeba;
+    }
+    
+    .result-moderate {
+      background-color: #f8d7da;
+      color: #721c24;
+      border-color: #f5c6cb;
+    }
+    
+    .result-dangerous {
+      background-color: #f5c6cb;
+      color: #721c24;
+      border-color: #f1b0b7;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Évaluation de la force du mot de passe</h1>
+    
+    <form id="passwordForm">
+      <div>
+        <label for="password">Mot de passe :</label>
+        <input type="password" id="password" name="password" required>
+      </div>
+      
+      <button type="submit">Évaluer</button>
+    </form>
+    
+    <div id="result" class="result"></div>
+  </div>
+  
+  <script>
+    var form = document.getElementById('passwordForm');
+    var resultDiv = document.getElementById('result');
+    
+    form.addEventListener('submit', function(event) {
+      event.preventDefault();
+      
+      var password = document.getElementById('password').value;
+      var strength = evaluatePasswordStrength(password);
+      
+      showResult(strength);
+    });
+    
+    function evaluatePasswordStrength(password) {
+      if (password.length >= 8) {
+        if (/[a-z]/.test(password) && /[A-Z]/.test(password)) {
+          if (/[0-9]/.test(password)) {
+            if (/[^a-zA-Z0-9]/.test(password)) {
+              return "Très sécurisé";
+            } else {
+              return "Sécurisé";
+            }
+          } else {
+            return "Moyen";
+          }
+        } else {
+          return "Moyen";
+        }
+      } else {
+        return "Dangereux";
+      }
+    }
+    
+    function showResult(strength) {
+      var className = '';
+      
+      switch (strength) {
+        case 'Très sécurisé':
+          className = 'result-very-secure';
+          break;
+        case 'Sécurisé':
+          className = 'result-secure';
+          break;
+        case 'Moyen':
+          className = 'result-moderate';
+          break;
+        case 'Dangereux':
+          className = 'result-dangerous';
+          break;
+      }
+      
+      resultDiv.innerHTML = '<p>' + strength + '</p>';
+      resultDiv.className = 'result ' + className;
+    }
+  </script>
+</body>
+</html>
